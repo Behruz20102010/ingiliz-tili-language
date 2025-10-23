@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Russian Speaking Practice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: white;
+      padding: 15px 60px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar a {
+      color: #fa709a;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #fee140;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .practice-box {
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      color: #fa709a;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .score {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .question-card {
+      background: #fff8f0;
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      border: 3px solid #fa709a;
+      text-align: left;
+    }
+
+    .question {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .phrase-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 2px solid #fa709a;
+    }
+
+    .russian-text {
+      font-size: 24px;
+      color: #fa709a;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .translation {
+      font-size: 16px;
+      color: #666;
+      font-style: italic;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .speak-btn, .listen-btn {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .speak-btn:hover, .listen-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(250, 112, 154, 0.4);
+    }
+
+    .status {
+      background: #f0f9ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #333;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .next-btn {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 20px;
+    }
+
+    .next-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(250, 112, 154, 0.4);
+    }
+
+    .result {
+      display: none;
+      padding: 30px;
+      background: #fff8f0;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    .result h2 {
+      color: #fa709a;
+      margin-bottom: 20px;
+    }
+
+    .result p {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .restart-btn {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .restart-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .instruction {
+      background: #e0f2fe;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #0369a1;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .practice-box {
+        padding: 30px 20px;
+      }
+      .controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="russian.html">← Rus tili darslariga qaytish</a>
+  </nav>
+
+  <div class="container">
+    <div class="practice-box">
+      <h1>🎤 Gapirish mashqlari</h1>
+      <div class="score">Mashq: <span id="current">1</span> / <span id="total">8</span></div>
+      
+      <div id="quiz-container">
+        <div class="instruction">
+          🎯 "Tinglash" tugmasini bosing va keyin iborani takrorlang
+        </div>
+        
+        <div class="question-card">
+          <div class="question">Quyidagi iborani aytib ko'ring:</div>
+          
+          <div class="phrase-box">
+            <div class="russian-text" id="russianText"></div>
+            <div class="translation" id="translation"></div>
+          </div>
+
+          <div class="controls">
+            <button class="listen-btn" onclick="listenPhrase()">
+              🔊 Tinglash
+            </button>
+            <button class="speak-btn" onclick="startRecording()">
+              🎤 Aytish
+            </button>
+          </div>
+
+          <div class="status" id="status">
+            Tayyor? Tugmalarni bosing!
+          </div>
+        </div>
+        
+        <button class="next-btn" onclick="nextQuestion()">Keyingi mashq →</button>
+      </div>
+
+      <div class="result" id="result">
+        <h2>🎉 Barcha mashqlar tugadi!</h2>
+        <p>Siz <span id="finalCount"></span> ta iborani mashq qildingiz!</p>
+        <button class="restart-btn" onclick="restartQuiz()">Qayta boshlash</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const speakingPhrases = [
+      {
+        russian: "Здравствуйте!",
+        translation: "Salom! (Rasmiy)"
+      },
+      {
+        russian: "Меня зовут...",
+        translation: "Mening ismim..."
+      },
+      {
+        russian: "Как ваши дела?",
+        translation: "Qalaysiz?"
+      },
+      {
+        russian: "Очень приятно!",
+        translation: "Juda xursandman!"
+      },
+      {
+        russian: "Я изучаю русский язык.",
+        translation: "Men rus tilini o'rganyapman."
+      },
+      {
+        russian: "Где находится...?",
+        translation: "... qayerda joylashgan?"
+      },
+      {
+        russian: "Сколько это стоит?",
+        translation: "Bu qancha turadi?"
+      },
+      {
+        russian: "До свидания!",
+        translation: "Xayr! Ko'rishguncha!"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let isRecording = false;
+
+    function loadQuestion() {
+      const phrase = speakingPhrases[currentQuestion];
+      document.getElementById('russianText').textContent = phrase.russian;
+      document.getElementById('translation').textContent = phrase.translation;
+      document.getElementById('current').textContent = currentQuestion + 1;
+      document.getElementById('total').textContent = speakingPhrases.length;
+      document.getElementById('status').textContent = 'Tayyor? Tugmalarni bosing!';
+    }
+
+    function listenPhrase() {
+      const phrase = speakingPhrases[currentQuestion];
+      const utterance = new SpeechSynthesisUtterance(phrase.russian);
+      utterance.lang = 'ru-RU';
+      utterance.rate = 0.7;
+      
+      document.getElementById('status').textContent = '🔊 Tinglayapsiz...';
+      
+      utterance.onend = function() {
+        document.getElementById('status').textContent = 'Endi siz aytib ko\'ring!';
+      };
+      
+      speechSynthesis.speak(utterance);
+    }
+
+    function startRecording() {
+      if (isRecording) return;
+      
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        document.getElementById('status').textContent = '❌ Brauzeringiz ovozni taniy olmaydi';
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'ru-RU';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      isRecording = true;
+      document.getElementById('status').textContent = '🎤 Tinglanmoqda... Gapiring!';
+
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('status').textContent = '✅ Siz aytdingiz: "' + transcript + '"';
+        isRecording = false;
+      };
+
+      recognition.onerror = function(event) {
+        document.getElementById('status').textContent = '❌ Xatolik yuz berdi. Qayta urinib ko\'ring.';
+        isRecording = false;
+      };
+
+      recognition.onend = function() {
+        isRecording = false;
+      };
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < speakingPhrases.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('finalCount').textContent = speakingPhrases.length;
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Russian Grammar Practice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: white;
+      padding: 15px 60px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar a {
+      color: #764ba2;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #667eea;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .practice-box {
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      color: #764ba2;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .score {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .question-card {
+      background: #f5f3ff;
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      border: 3px solid #764ba2;
+      text-align: left;
+    }
+
+    .question {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .sentence {
+      font-size: 18px;
+      color: #666;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #764ba2;
+      color: #764ba2;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .option-btn:hover {
+      background: #764ba2;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
+    }
+
+    .option-btn.correct {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .option-btn.wrong {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: white;
+    }
+
+    .next-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      display: none;
+    }
+
+    .next-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(118, 75, 162, 0.4);
+    }
+
+    .result {
+      display: none;
+      padding: 30px;
+      background: #f5f3ff;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    .result h2 {
+      color: #764ba2;
+      margin-bottom: 20px;
+    }
+
+    .result p {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .restart-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .restart-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      .practice-box {
+        padding: 30px 20px;
+      }
+      .options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="russian.html">← Rus tili darslariga qaytish</a>
+  </nav>
+
+  <div class="container">
+    <div class="practice-box">
+      <h1>📚 Rus tili grammatikasi</h1>
+      <div class="score">Ball: <span id="score">0</span> / <span id="total">8</span></div>
+      
+      <div id="quiz-container">
+        <div class="question-card">
+          <div class="question" id="question"></div>
+          <div class="sentence" id="sentence"></div>
+        </div>
+        
+        <div class="options" id="options"></div>
+        
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Keyingi savol →</button>
+      </div>
+
+      <div class="result" id="result">
+        <h2>🎉 Test tugadi!</h2>
+        <p>Sizning natijangiz: <span id="finalScore"></span>/8</p>
+        <button class="restart-btn" onclick="restartQuiz()">Qayta urinish</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const grammarQuestions = [
+      {
+        question: "To'g'ri kelishikni tanlang:",
+        sentence: "Я читаю ___ (kitob).",
+        options: ["книга", "книгу", "книги", "книге"],
+        correct: 1
+      },
+      {
+        question: "To'g'ri fe'l shaklini tanlang:",
+        sentence: "Он ___ в школу каждый день.",
+        options: ["идти", "идёт", "идут", "иду"],
+        correct: 1
+      },
+      {
+        question: "To'g'ri predlogni tanlang:",
+        sentence: "Я живу ___ Москве.",
+        options: ["в", "на", "у", "от"],
+        correct: 0
+      },
+      {
+        question: "To'g'ri olmoshni tanlang:",
+        sentence: "___ друзья.",
+        options: ["Этот", "Эта", "Это", "Эти"],
+        correct: 3
+      },
+      {
+        question: "O'tgan zamon shaklini tanlang:",
+        sentence: "Вчера она ___ письмо.",
+        options: ["писать", "написала", "пишет", "напишет"],
+        correct: 1
+      },
+      {
+        question: "To'g'ri qaratqich kelishigini tanlang:",
+        sentence: "У меня нет ___.",
+        options: ["брат", "брата", "брату", "братом"],
+        correct: 1
+      },
+      {
+        question: "To'g'ri qiyosiy darajani tanlang:",
+        sentence: "Москва ___ Лондона.",
+        options: ["большой", "больше", "самый большой", "более большой"],
+        correct: 1
+      },
+      {
+        question: "To'g'ri harakat fe'lini tanlang:",
+        sentence: "Я ___ домой сейчас.",
+        options: ["идти", "иду", "ходить", "хожу"],
+        correct: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    function loadQuestion() {
+      answered = false;
+      const q = grammarQuestions[currentQuestion];
+      document.getElementById('question').textContent = q.question;
+      document.getElementById('sentence').textContent = q.sentence;
+      
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      
+      q.options.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(index);
+        optionsDiv.appendChild(btn);
+      });
+      
+      document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('score').textContent = score;
+    }
+
+    function checkAnswer(selected) {
+      if (answered) return;
+      answered = true;
+      
+      const q = grammarQuestions[currentQuestion];
+      const buttons = document.querySelectorAll('.option-btn');
+      
+      if (selected === q.correct) {
+        buttons[selected].classList.add('correct');
+        score++;
+        document.getElementById('score').textContent = score;
+      } else {
+        buttons[selected].classList.add('wrong');
+        buttons[q.correct].classList.add('correct');
+      }
+      
+      buttons.forEach(btn => btn.style.pointerEvents = 'none');
+      document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < grammarQuestions.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('finalScore').textContent = score;
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>

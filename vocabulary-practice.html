@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulary Practice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: white;
+      padding: 15px 60px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #764ba2;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .practice-box {
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      color: #667eea;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .score {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .word-card {
+      background: #f8f9ff;
+      padding: 40px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      border: 3px solid #667eea;
+    }
+
+    .word {
+      font-size: 48px;
+      color: #667eea;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #667eea;
+      color: #667eea;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .option-btn:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .option-btn.correct {
+      background: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+
+    .option-btn.wrong {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: white;
+    }
+
+    .next-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      display: none;
+    }
+
+    .next-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .result {
+      display: none;
+      padding: 30px;
+      background: #f8f9ff;
+      border-radius: 15px;
+      margin-top: 20px;
+    }
+
+    .result h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+    }
+
+    .result p {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .restart-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .restart-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      .practice-box {
+        padding: 30px 20px;
+      }
+      .word {
+        font-size: 36px;
+      }
+      .options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="javascript:history.back()">← Back to Lessons</a>
+  </nav>
+
+  <div class="container">
+    <div class="practice-box">
+      <h1>🎯 Vocabulary Practice</h1>
+      <div class="score">Score: <span id="score">0</span> / <span id="total">10</span></div>
+      
+      <div id="quiz-container">
+        <div class="word-card">
+          <div class="word" id="word"></div>
+        </div>
+        
+        <div class="options" id="options"></div>
+        
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+      </div>
+
+      <div class="result" id="result">
+        <h2>🎉 Quiz Complete!</h2>
+        <p>Your Score: <span id="finalScore"></span>/10</p>
+        <button class="restart-btn" onclick="restartQuiz()">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const vocabulary = [
+      { word: "school", options: ["Maktab", "Uy", "Sinif", "Kaledor"], correct: 0 },
+      { word: "Home", options: ["Sinif", "Maktab", "Uy", "Kaledor"], correct: 2 },
+      { word: "Table", options: ["Lampa", "Stol", "do'ska", "Sto'l"], correct: 1 },
+      { word: "Board", options: ["Eshik", "Do'ska", "Chiroq", "Sto'l"], correct: 1 },
+      { word: "Laptop", options: ["Telefon", "Planshet", "Kampyuter", "Televizor"], correct: 2 },
+      { word: "Notebook", options: ["Kitob", "Daftar", "Planshet", "Penal"], correct: 1 },
+      { word: "Mouse", options: ["Sichqoncha", "telefon", "Kompyuter", "Kitob"], correct: 0 },
+      { word: "Tv", options: ["Kompyuter", "Telivizor", "Telefon", "Daftar"], correct: 1 },
+      { word: "Book", options: ["Daftar", "Kitob", "Qalam", "Qog'oz"], correct: 1 },
+      { word: "House", options: ["Xona", "Uy", "Bino", "Hovli"], correct: 1 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    function loadQuestion() {
+      answered = false;
+      const q = vocabulary[currentQuestion];
+      document.getElementById('word').textContent = q.word;
+      
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = '';
+      
+      q.options.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(index);
+        optionsDiv.appendChild(btn);
+      });
+      
+      document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('score').textContent = score;
+    }
+
+    function checkAnswer(selected) {
+      if (answered) return;
+      answered = true;
+      
+      const q = vocabulary[currentQuestion];
+      const buttons = document.querySelectorAll('.option-btn');
+      
+      if (selected === q.correct) {
+        buttons[selected].classList.add('correct');
+        score++;
+        document.getElementById('score').textContent = score;
+      } else {
+        buttons[selected].classList.add('wrong');
+        buttons[q.correct].classList.add('correct');
+      }
+      
+      buttons.forEach(btn => btn.style.pointerEvents = 'none');
+      document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < vocabulary.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('finalScore').textContent = score;
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>

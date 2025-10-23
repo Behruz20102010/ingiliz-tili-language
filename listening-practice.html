@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listening Practice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: white;
+      padding: 15px 60px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .navbar a {
+      color: #fa709a;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #fee140;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .practice-box {
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 650px;
+      width: 100%;
+      text-align: center;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      color: #fa709a;
+      margin-bottom: 30px;
+      font-size: 32px;
+    }
+
+    .score {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .audio-card {
+      background: #fff8f0;
+      padding: 40px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      border: 3px solid #fa709a;
+    }
+
+    .instruction {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    .play-btn {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      border: none;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      font-size: 32px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-bottom: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(250, 112, 154, 0.4);
+    }
+
+    .input-answer {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #fa709a;
+      border-radius: 10px;
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .check-btn {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .check-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(250, 112, 154, 0.4);
+    }
+
+    .feedback {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .feedback.correct {
+      background: #d1fae5;
+      color: #065f46;
+      display: block;
+    }
+
+    .feedback.wrong {
+      background: #fee2e2;
+      color: #991b1b;
+      display: block;
+    }
+
+    .next-btn {
+      background: white;
+      border: 2px solid #fa709a;
+      color: #fa709a;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .next-btn:hover {
+      background: #fa709a;
+      color: white;
+    }
+
+    .result {
+      display: none;
+      padding: 30px;
+      background: #fff8f0;
+      border-radius: 15px;
+    }
+
+    .result h2 {
+      color: #fa709a;
+      margin-bottom: 20px;
+    }
+
+    .result p {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .restart-btn {
+      background: linear-gradient(135deg, #fa709a, #fee140);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .restart-btn:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      .practice-box {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="javascript:history.back()">← Back to Lessons</a>
+  </nav>
+
+  <div class="container">
+    <div class="practice-box">
+      <h1>🎧 Listening Practice</h1>
+      <div class="score">Score: <span id="score">0</span> / <span id="total">6</span></div>
+      
+      <div id="quiz-container">
+        <div class="audio-card">
+          <div class="instruction">Listen carefully and type what you hear:</div>
+          <button class="play-btn" onclick="playAudio()">▶️</button>
+          <input type="text" class="input-answer" id="answer" placeholder="Type your answer here...">
+          <button class="check-btn" onclick="checkAnswer()">Check Answer</button>
+          <div class="feedback" id="feedback"></div>
+        </div>
+        
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+      </div>
+
+      <div class="result" id="result">
+        <h2>🎉 Practice Complete!</h2>
+        <p>Your Score: <span id="finalScore"></span>/6</p>
+        <button class="restart-btn" onclick="restartQuiz()">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sentences = [
+      "Hello, how are you today?",
+      "I love learning English.",
+      "What is your favorite food?",
+      "The weather is beautiful today.",
+      "Can you help me please?",
+      "Thank you very much!"
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    function playAudio() {
+      const sentence = sentences[currentQuestion];
+      const utterance = new SpeechSynthesisUtterance(sentence);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      speechSynthesis.speak(utterance);
+    }
+
+    function checkAnswer() {
+      if (answered) return;
+      answered = true;
+
+      const userAnswer = document.getElementById('answer').value.trim().toLowerCase();
+      const correctAnswer = sentences[currentQuestion].toLowerCase();
+      const feedback = document.getElementById('feedback');
+
+      if (userAnswer === correctAnswer) {
+        feedback.className = 'feedback correct';
+        feedback.textContent = '✅ Correct! Well done!';
+        score++;
+        document.getElementById('score').textContent = score;
+      } else {
+        feedback.className = 'feedback wrong';
+        feedback.textContent = `❌ Incorrect. The correct answer is: "${sentences[currentQuestion]}"`;
+      }
+
+      document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      if (currentQuestion < sentences.length) {
+        answered = false;
+        document.getElementById('answer').value = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'none';
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('finalScore').textContent = score;
+    }
+
+    function restartQuiz() {
+      currentQuestion = 0;
+      score = 0;
+      answered = false;
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('answer').value = '';
+      document.getElementById('feedback').style.display = 'none';
+      document.getElementById('score').textContent = score;
+    }
+  </script>
+</body>
+</html>
